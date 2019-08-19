@@ -1,6 +1,11 @@
 
-(in-package :xmler)
-(require :uiop)
+(defpackage #:xmler
+  (:use #:common-lisp #:uiop)
+  (:export #:elem
+	   #:xml))
+
+(in-package #:xmler)
+;; (require :uiop)
 
 
 (defconstant +space+ #\u0020)
