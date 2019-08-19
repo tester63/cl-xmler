@@ -33,8 +33,7 @@
   (uiop:strcat open-mark name
 	       ;; Join strings
 	       (if attrs-alist
-		   (format nil " ~{~A~^ ~}"
-			   (mapcar #'assign-attr attrs-alist))
+		   (format nil " ~{~A~^ ~}" (mapcar #'assign-attr attrs-alist))
 		   "")
 	       (if empty empty-close-mark close-mark)))
 
@@ -111,12 +110,11 @@
 			   (cdr elem-cell)))
 	  indented-elems))
 
-(defun xml (elems &key (path "/tmp/etude") (extension "xml") (depth 0))
+(defun xml (elems &key (path "/tmp/etude.xml") (depth 0))
   (let ((indented-lines (lines (indent elems depth))))
-    (with-open-file (stream (uiop:strcat path "." extension)
+    (with-open-file (stream path
 			    :direction :output
 			    :if-exists :supersede
 			    :if-does-not-exist :create)
       (loop for line in indented-lines
-	   do (format stream (uiop:strcat line "~%"))))))
-
+	 do (format stream (uiop:strcat line "~%"))))))
