@@ -1,11 +1,15 @@
+;;; 
+
 
 (defpackage #:xmler
-  (:use #:common-lisp #:uiop)
+  (:use #:common-lisp)
+  (:import-from #:uiop
+		#:split-string
+		#:strcat)
   (:export #:elem
 	   #:xml))
 
 (in-package #:xmler)
-;; (require :uiop)
 
 
 (defconstant +space+ #\u0020)
@@ -19,13 +23,13 @@
      (= (list-length list) 3)
      ;; Head and tail should be strings (tags)
      (and (stringp head) (stringp tail))
-     (string= (first (uiop:split-string (string-trim "</>" head)))
+     (string= (first (split-string (string-trim "</>" head)))
 	      (string-trim "</>" tail)))))
 
 (defun assign-attr (attr-cell)
   (let ((name (car attr-cell))
 	(type (cdr attr-cell)))
-    (uiop:strcat name "=\"" type "\"")))
+    (strcat name "=\"" type "\"")))
 
 
 (defun opening-tag (name &key
@@ -35,7 +39,7 @@
 			   (close-mark ">")
 			   (empty-close-mark "/>"))
   "Returns the <elem attrs...> string."
-  (uiop:strcat open-mark name
+  (strcat open-mark name
 	       ;; Join strings
 	       (if attrs-alist
 		   (format nil " ~{~A~^ ~}" (mapcar #'assign-attr attrs-alist))
@@ -44,7 +48,7 @@
 
 (defun closing-tag (name)
   "Returns the closing </elem> tag string."
-  (uiop:strcat "</" name ">"))
+  (strcat "</" name ">"))
 
 (defun elem (name &key attr cont
 		    (open-mark "<")
@@ -56,7 +60,7 @@
     ;; If cont is just a string, return an appended-string, otherwise a list.
     ((and attr cont)
      (if (stringp cont)
-	 (uiop:strcat
+	 (strcat
 	  (opening-tag name
 		       :attrs-alist attr
 		       :open-mark open-mark
@@ -72,7 +76,7 @@
     ;; -attrs +conts
     (cont
      (if (stringp cont)
-	 (uiop:strcat
+	 (strcat
 	  (opening-tag name
 		       :open-mark open-mark
 		       :close-mark close-mark)
@@ -110,7 +114,7 @@
 
 (defun lines (indented-elems)
   (mapcar #'(lambda (elem-cell)
-	      (uiop:strcat (make-string (car elem-cell)
+	      (strcat (make-string (car elem-cell)
 					:initial-element +space+)
 			   (cdr elem-cell)))
 	  indented-elems))
@@ -122,4 +126,4 @@
 			    :if-exists :supersede
 			    :if-does-not-exist :create)
       (loop for line in indented-lines
-	 do (format stream (uiop:strcat line "~%"))))))
+	 do (format stream (strcat line "~%"))))))
