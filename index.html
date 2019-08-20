@@ -6,6 +6,26 @@
   <body bgcolor="#F1D4DF">
 
     <h1>This is a porting of <a href="https://amirteymuri.github.io/xmler/">Chicken Xmler</a> for Common Lisp</h1>
+    <p>
+      Xmler is a simple interface for creating bindings to XML-based languages like HTML, MusicXML, SVG etc. for CL.
+      The main function which writes to an XML file is <code>xml</code> and has the following signature:
+    </p>
+    
+    <pre>
+      (xml elems &key (path "/tmp/etude.xml") (depth 0))
+    </pre>
+
+    <p>
+      where <code>elems</code> is an element (which would result in a XML tree with one root) or a list of elements (equal to multiple roots with the same level of indentation). Each element is created by the function <code>elem</code> with the following signature:
+    </p>
+
+    <pre>
+      (elem name &key attr cont (open-mark "<")
+	(close-mark ">")
+	(empty-close-mark "/>"))
+    </pre>
+
+    
 
   </body>
   <p style="font-size:10px"><a href="http://amirteymuri.users.sourceforge.net/">Amir Teymuri</a>, Wed Aug 21 00:59:47 2019</p>
