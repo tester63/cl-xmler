@@ -32,6 +32,71 @@
     </p>
 
     <h2>Some examples</h2>
+    A simple HTML file elements can be defined:
+    <pre>
+(asdf:load-system :xmler)
+
+(defparameter *xml-declare*
+  (xmler:elem "DOCTYPE html"
+	      :open-mark "<!"
+	      :empty-close-mark ">"))
+(defun html (content)
+  (xmler:elem "html" :cont content))
+(defun body (content)
+  (xmler:elem "body" :cont content))
+(defun h1 (content)
+  (xmler:elem "h1" :cont content))
+(defun p (content)
+  (xmler:elem "p" :cont content))
+
+(xmler:xml
+ (list *xml-declare*
+       (html
+	(body (list (h1 "My First Heading")
+		    (p "My first paragraph.")))))
+ :path "/tmp/test.html")      
+    </pre>
+    <p>The resulting /tmp/test.html file will then contain:</p>
+    <pre>
+<!DOCTYPE html>
+<html>
+ <body>
+  <h1>My First Heading</h1>
+  <p>My first paragraph.</p>
+ </body>
+</html>
+    </pre>
+    <p>
+      Another example which implements some basic bindgins for creating a simple SVG image:
+    </p>
+    <pre>
+;;; Define the bindings:
+(defun svg (attr cont)
+  (xmler:elem "svg" :attr attr :cont cont))
+(defun rect (attr)
+  (xmler:elem "rect" :attr attr))
+
+;;; Draw the rect to a .svg file:
+(xmler:xml
+ (svg '(("xmlns" . "http://www.w3.org/2000/svg")
+	("xmlns:xlink" . "http://www.w3.org/1999/xlink"))
+      ;; Puting the rect element inside a list pushes it
+      ;; to a new indentation level.
+      (list (rect '(("x" . "10")
+		    ("y" . "10")
+		    ("height" . "100")
+		    ("width" . "100")
+		    ("style" . "stroke:#ff0000; fill: #0000ff")))))
+ :path "/tmp/test.svg")
+    </pre>
+    <p>
+      which creates the /tmp/test.svg file:
+    </p>
+    <pre>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <rect x="10" y="10" height="100" width="100" style="stroke:#ff0000; fill: #0000ff"/>
+</svg>
+    </pre>
     <h5><a href="https://github.com/amirteymuri/cl-xmler.git">Source on Github</a></h5>
 
   </body>
