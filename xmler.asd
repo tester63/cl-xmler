@@ -1,3 +1,4 @@
 (defsystem "xmler"
   :depends-on ("uiop")
-  :components ((:file "xmler")))
+  :components ((:file "pkg")
+	       (:file "xmler")))
