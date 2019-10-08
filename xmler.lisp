@@ -13,6 +13,7 @@
 
 
 (defconstant +space+ #\u0020)
+(defconstant +newline+ #\u000A)
 
 (defun elemp (list)
   "Is list a valid element?"
@@ -25,6 +26,12 @@
      (and (stringp head) (stringp tail))
      (string= (first (split-string (string-trim "</>" head)))
 	      (string-trim "</>" tail)))))
+
+;;; This causes no double-quotes (just for testing)
+;; (defun assign-attr (attr-cell)
+;;   (let ((name (car attr-cell))
+;; 	(type (cdr attr-cell)))
+;;     (strcat name "=" type "")))
 
 (defun assign-attr (attr-cell)
   (let ((name (car attr-cell))
@@ -112,15 +119,20 @@
      ;; Else its a list of elements and/or strings
      (t (apply #'append (mapcar #'(lambda (e) (indent e depth)) elems)))))
 
-(defun lines (indented-elems)
+(defun lines-list (indented-elems)
   (mapcar #'(lambda (elem-cell)
 	      (strcat (make-string (car elem-cell)
-					:initial-element +space+)
-			   (cdr elem-cell)))
+				   :initial-element +space+)
+		      (cdr elem-cell)))
 	  indented-elems))
 
+(defun lines-string (indented-elems)
+  (let ((lines-list (lines-list indented-elems)))
+    (apply #'strcat
+	   (mapcar #'(lambda (line) (strcat line (make-string 1 :initial-element +newline+))) lines-list))))
+
 (defun xml (elems &key (path "/tmp/etude.xml") (depth 0))
-  (let ((indented-lines (lines (indent elems depth))))
+  (let ((indented-lines (lines-list (indent elems depth))))
     (with-open-file (stream path
 			    :direction :output
 			    :if-exists :supersede
