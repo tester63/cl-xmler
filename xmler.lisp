@@ -24,9 +24,11 @@
 ;; 	(type (cdr attr-cell)))
 ;;     (strcat name "=" type "")))
 
+
+
 (defun assign-attr (attr-cell)
-  (let ((name (car attr-cell))
-	(type (cdr attr-cell)))
+  (let ((name (string-downcase (princ-to-string (car attr-cell))))
+	(type (string-downcase (princ-to-string (cdr attr-cell)))))
     (strcat name "=\"" type "\"")))
 
 
@@ -48,7 +50,7 @@
   "Returns the closing </elem> tag string."
   (strcat "</" name ">"))
 
-(defun elem (name &key attr cont
+(defun elem (name &key attrs cont
 		    (open-mark "<")
 		    (close-mark ">")
 		    (empty-close-mark "/>"))
@@ -56,17 +58,17 @@
   (cond
     ;; +attrs +conts
     ;; If cont is just a string, return an appended-string, otherwise a list.
-    ((and attr cont)
+    ((and attrs cont)
      (if (stringp cont)
 	 (strcat
 	  (opening-tag name
-		       :attrs-alist attr
+		       :attrs-alist attrs
 		       :open-mark open-mark
 		       :close-mark close-mark)
 	  cont
 	  (closing-tag name))
 	 (list (opening-tag name
-			    :attrs-alist attr
+			    :attrs-alist attrs
 			    :open-mark open-mark
 			    :close-mark close-mark)
 	       cont
@@ -86,8 +88,8 @@
 	       cont
 	       (closing-tag name))))
     ;; +attrs -conts (empty element)
-    (attr (opening-tag name
-		       :attrs-alist attr
+    (attrs (opening-tag name
+		       :attrs-alist attrs
 		       :empty t
 		       :open-mark open-mark
 		       :empty-close-mark empty-close-mark))
