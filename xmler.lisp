@@ -1,5 +1,5 @@
 ;;; Author: Amir Teymuri (ateymuri63 [at] gmail [dot com])
-;;; Change while in feature, i resolved the conflict with FEATURE
+;;; Change while in feature, i resolved the conflict with FEATUREMASTER
 
 
 (in-package #:xmler)
