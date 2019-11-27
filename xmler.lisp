@@ -1,4 +1,4 @@
-;;; 
+;;; Author: Amir Teymuri (ateymuri63 [at] gmail [dot com])
 
 (in-package #:xmler)
 
