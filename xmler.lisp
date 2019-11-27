@@ -1,5 +1,4 @@
 ;;; Author: Amir Teymuri (ateymuri63 [at] gmail [dot com])
-
 ;;; Change while in feature, i resolved the conflict with master
 
 (in-package #:xmler)
